@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Showroom</h2>
+            <a class="side-link" href="index.html">Dashboard</a>
+            <a class="side-link" href="products.html">Products</a>
+            <a class="side-link" href="customers.html">Customers</a>
+            <a class="side-link" href="sales.html">Sales</a>
+            <a class="side-link" href="stock.html">Stock</a>
+            <a class="side-link" href="billing.html">Billing</a>
+            <a class="side-link active" href="report.html">Reports</a>
+        </aside>
+
+        <main class="main-content">
+             ``
+            <div class="showroom-board">
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+
+                <h1 class="board-name">
+                    श्री गणेश मोटर्स
+                    <small>Showroom Management System</small>
+                </h1>
+
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+            </div>
+            <h1>Showroom Management System</h1>
+            <h2>Sales Report</h2>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h3>Total Bills</h3>
+                    <p id="totalBills">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Sales</h3>
+                    <p id="totalSales">₹0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Items Sold</h3>
+                    <p id="totalItems">0</p>
+                </div>
+            </div>
+
+            <h2>Bill Details</h2>
+            <button type="button" onclick="window.print()">Print Report</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bill ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTable"></tbody>
+            </table>
+            <p id="emptyMessage"></p>
+        </main>
+    </div>
+
+    <script>
+        function loadReport() {
+            const bills = JSON.parse(localStorage.getItem("bills") || "[]");
+            const table = document.getElementById("reportTable");
+            table.innerHTML = "";
+
+            let totalSales = 0;
+            let totalItems = 0;
+
+            bills.forEach(bill => {
+                const quantity = Number(bill.quantity || 0);
+                const total = Number(bill.total || 0);
+                totalSales += total;
+                totalItems += quantity;
+
+                const tr = document.createElement("tr");
+                [
+                    bill.billId || "",
+                    bill.date || "",
+                    bill.customerName || "",
+                    bill.productName || "",
+                    quantity,
+                    "₹" + Number(bill.price || 0).toFixed(2),
+                    "₹" + total.toFixed(2)
+                ].forEach(value => {
+                    const td = document.createElement("td");
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+
+            document.getElementById("totalBills").textContent = bills.length;
+            document.getElementById("totalSales").textContent = "₹" + totalSales.toFixed(2);
+            document.getElementById("totalItems").textContent = totalItems;
+            document.getElementById("emptyMessage").textContent =
+                bills.length === 0 ? "No billing records found." : "";
+        }
+
+        loadReport();
+    </script>
+</body>
+
+</html>
