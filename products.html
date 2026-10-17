@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Products - Showroom Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <h2 class="logo">Showroom</h2>
+
+            <p class="side-title">MAIN MENU</p>
+
+            <a href="index.html" class="side-link">🏠 Dashboard</a>
+
+            <a href="products.html" class="side-link active">
+                📦 Products
+            </a>
+
+            <a href="customers.html" class="side-link">
+                👥 Customers
+            </a>
+
+            <a href="sales.html" class="side-link">
+                💰 Sales
+            </a>
+
+            <a href="stock.html" class="side-link">
+                📊 Stock
+            </a>
+
+            <a href="billing.html" class="side-link">
+                🧾 Billing
+            </a>
+
+            <a href="reports.html" class="side-link">
+                📈 Reports
+            </a>
+
+        </aside>
+
+
+        <main class="main-content">
+
+            <div class="showroom-board">
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+
+                <h1 class="board-name">
+                    श्री गणेश मोटर्स
+                    <small>Showroom Management System</small>
+                </h1>
+
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+            </div>
+
+            <h1>Showroom Management System</h1>
+
+            <h2>Products</h2>
+
+
+            <button class="menu-btn" onclick="location.href='index.html'">
+                Back to Dashboard
+            </button>
+
+
+            <h3>Add Product</h3>
+
+
+            <input type="text" id="productId" placeholder="Product ID">
+
+            <input type="text" id="productName" placeholder="Product Name">
+
+            <input type="text" id="category" placeholder="Category">
+
+            <input type="number" id="price" placeholder="Price">
+
+            <input type="number" id="quantity" placeholder="Quantity">
+
+
+            <button class="menu-btn" onclick="addProduct()">
+                Add Product
+            </button>
+
+
+            <h3>Product List</h3>
+
+
+            <table id="productTable">
+
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>action</th>
+                </tr>
+
+            </table>
+
+        </main>
+
+    </div>
+
+    <script>
+
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+        function addProduct() {
+            const id = document.getElementById("productId").value.trim();
+            const name = document.getElementById("productName").value.trim();
+            const category = document.getElementById("category").value.trim();
+            const price = Number(document.getElementById("price").value);
+            const quantity = Number(document.getElementById("quantity").value);
+
+            if (!id || !name || price <= 0 || quantity < 0) {
+                alert("Please enter all details.");
+                return;
+            }
+
+            products.push({ id, name, category, price, quantity });
+            localStorage.setItem("products", JSON.stringify(products));
+
+            showProducts();
+
+            ["productId", "productName", "category", "price", "quantity"]
+                .forEach(function (i) {
+                    document.getElementById(i).value = "";
+                });
+        }
+
+        function showProducts() {
+            const table = document.getElementById("productTable");
+
+            table.innerHTML = `<tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>`;
+
+            products.forEach(function (p) {
+                table.innerHTML += `<tr>
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>${p.price}</td>
+                    <td>${p.Quantity}</td>
+                    <td>
+                     <button onclick="deleteProduct('${p.id}')">Delete</button>
+                     </td>
+                     </tr>`;
+
+            });
+        }
+
+        showProducts();
+        function deleteProduct(id) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                products = products.filter(function (p) {
+                    return p.id !== id;
+                });
+
+                localStorage.setItem("products", JSON.stringify(products));
+                showProducts();
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

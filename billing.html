@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing - Showroom Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+            <h2>Showroom</h2>
+
+            <a class="side-link" href="index.html">Dashboard</a>
+            <a class="side-link" href="products.html">Products</a>
+            <a class="side-link" href="customers.html">Customers</a>
+            <a class="side-link" href="sales.html">Sales</a>
+            <a class="side-link" href="stock.html">Stock</a>
+            <a class="side-link active" href="billing.html">Billing</a>
+            <a class="side-link" href="Reports.html">Reports</a>
+        </aside>
+
+        <main class="main-content">
+          
+            <div class="showroom-board">
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+
+                <h1 class="board-name">
+                    श्री गणेश मोटर्स
+                    <small>Showroom Management System</small>
+                </h1>
+
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+            </div>
+
+            <h1>Showroom Management System</h1>
+
+            <h2>Billing</h2>
+
+            <form id="billForm">
+
+                <label>Customer Name</label>
+                <input type="text" id="customerName" required>
+
+                <label>Select Product</label>
+                <select id="productSelect" required>
+                    <option value="">Select Product</option>
+                </select>
+
+                <label>Quantity</label>
+                <input type="number" id="quantity" min="1" required>
+
+                <button type="submit">Generate Bill</button>
+
+            </form>
+
+            <p id="message"></p>
+
+            <div id="billOutput"></div>
+
+        </main>
+
+    </div>
+
+    <script>
+
+        function getProducts() {
+            return JSON.parse(localStorage.getItem("products") || "[]");
+        }
+
+        function getBills() {
+            return JSON.parse(localStorage.getItem("bills") || "[]");
+        }
+
+        function getId(product) {
+            return String(product.productId || product.id || "");
+        }
+
+        function getName(product) {
+            return product.productName || product.name || "";
+        }
+
+        function loadProducts() {
+
+            const select = document.getElementById("productSelect");
+
+            select.innerHTML = '<option value="">Select Product</option>';
+
+            getProducts().forEach(function (product, index) {
+
+                const option = document.createElement("option");
+
+                option.value = index;
+
+                option.textContent =
+                    getName(product) + " (Stock: " + Number(product.quantity || 0) + ")";
+
+                select.appendChild(option);
+            });
+        }
+
+        document.getElementById("billForm").addEventListener("submit", function (e) {
+
+            e.preventDefault();
+
+            const products = getProducts();
+
+            const index = document.getElementById("productSelect").value;
+
+            const quantity = Number(document.getElementById("quantity").value);
+
+            const customer = document.getElementById("customerName").value.trim();
+
+            const message = document.getElementById("message");
+
+            const output = document.getElementById("billOutput");
+
+            if (index === "" || customer === "" || quantity < 1) {
+                message.textContent = "Please enter valid details.";
+                return;
+            }
+
+            const product = products[index];
+
+            if (!product) {
+                message.textContent = "Product not found.";
+                return;
+            }
+
+            const available = Number(product.quantity || 0);
+
+            if (quantity > available) {
+                message.textContent = "Not enough stock available.";
+                return;
+            }
+
+            const price = Number(product.price || 0);
+            const total = price * quantity;
+
+            const bill = {
+                billId: "BILL" + Date.now(),
+                customerName: customer,
+                productId: getId(product),
+                productName: getName(product),
+                quantity: quantity,
+                price: price,
+                total: total,
+                date: new Date().toLocaleString()
+            };
+
+            // Reduce stock
+            product.quantity = available - quantity;
+            products[index] = product;
+
+            // Save bill
+            const bills = getBills();
+            bills.push(bill);
+
+            localStorage.setItem("products", JSON.stringify(products));
+            localStorage.setItem("bills", JSON.stringify(bills));
+
+            loadProducts();
+
+            output.innerHTML = `
+                <h3>Showroom Bill</h3>
+                <p><b>Bill ID:</b> ${bill.billId}</p>
+                <p><b>Date:</b> ${bill.date}</p>
+                <p><b>Customer:</b> ${bill.customerName}</p>
+                <p><b>Product:</b> ${bill.productName}</p>
+                <p><b>Quantity:</b> ${bill.quantity}</p>
+                <p><b>Price:</b> ₹${bill.price}</p>
+                <p><b>Total:</b> ₹${bill.total}</p>
+                <button type="button" onclick="window.print()">Print Bill</button>
+            `;
+
+            message.textContent = "Bill generated successfully!";
+
+            document.getElementById("billForm").reset();
+        });
+
+        // Page load वर products dropdown मध्ये भरा
+        loadProducts();
+
+    </script>
+
+</body>
+
+</html>

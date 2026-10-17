@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers - Showroom Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+            <h2 class="logo">Showroom</h2>
+            <p class="side-title">MAIN MENU</p>
+
+            <a href="index.html" class="side-link">🏠 Dashboard</a>
+            <a href="products.html" class="side-link">📦 Products</a>
+            <a href="customers.html" class="side-link active">👥 Customers</a>
+            <a href="sales.html" class="side-link">💰 Sales</a>
+            <a href="stock.html" class="side-link">📊 Stock</a>
+            <a href="billing.html" class="side-link">🧾 Billing</a>
+            <a href="reports.html" class="side-link">📈 Reports</a>
+        </aside>
+
+        <main class="main-content">
+            
+            <div class="showroom-board">
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+
+                <h1 class="board-name">
+                    श्री गणेश मोटर्स
+                    <small>Showroom Management System</small>
+                </h1>
+
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+            </div>
+
+            <h1>Showroom Management System</h1>
+            <h2>Customers</h2>
+            <p>Manage your showroom customers</p>
+
+            <button class="menu-btn" onclick="location.href='index.html'">
+                Back to Dashboard
+            </button>
+
+            <h3>Add Customer</h3>
+
+            <div class="card">
+                <input type="text" id="customerId" placeholder="Customer ID">
+                <input type="text" id="customerName" placeholder="Customer Name">
+                <input type="text" id="mobile" placeholder="Mobile Number" maxlength="10">
+                <input type="text" id="city" placeholder="City">
+                <input type="text" id="purchase" placeholder="Purchase">
+
+                <button class="menu-btn" onclick="addCustomer()">
+                    Add Customer
+                </button>
+            </div>
+
+            <h3>Customer List</h3>
+
+            <div style="overflow-x:auto;">
+                <table id="customerTable"></table>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function getCustomers() {
+            try {
+                const data = JSON.parse(localStorage.getItem("customers"));
+                return Array.isArray(data) ? data : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        let customers = getCustomers();
+
+        function displayCustomers() {
+            const table = document.getElementById("customerTable");
+            table.innerHTML = "";
+
+            const headers = [
+                "Customer ID",
+                "Customer Name",
+                "Mobile Number",
+                "City",
+                "Purchase"
+            ];
+
+            const headerRow = table.insertRow();
+
+            headers.forEach(function (heading) {
+                const th = document.createElement("th");
+                th.textContent = heading;
+                headerRow.appendChild(th);
+            });
+
+            customers.forEach(function (customer) {
+                const row = table.insertRow();
+
+                [
+                    customer.id,
+                    customer.name,
+                    customer.mobile,
+                    customer.city,
+                    customer.purchase
+                ].forEach(function (value) {
+                    const cell = row.insertCell();
+                    cell.textContent = value ?? "";
+                });
+            });
+        }
+
+        function addCustomer() {
+            const id = document.getElementById("customerId").value.trim();
+            const name = document.getElementById("customerName").value.trim();
+            const mobile = document.getElementById("mobile").value.trim();
+            const city = document.getElementById("city").value.trim();
+            const purchase = document.getElementById("purchase").value.trim();
+
+            if (!id || !name || !mobile || !city || !purchase) {
+                alert("Please fill all fields");
+                return;
+            }
+
+            if (!/^[0-9]{10}$/.test(mobile)) {
+                alert("Please enter a valid 10-digit mobile number");
+                return;
+            }
+
+            const exists = customers.some(function (customer) {
+                return String(customer.id).toLowerCase() === id.toLowerCase();
+            });
+
+            if (exists) {
+                alert("Customer ID already exists");
+                return;
+            }
+
+            const customer = {
+                id: id,
+                name: name,
+                mobile: mobile,
+                city: city,
+                purchase: purchase
+            };
+
+            customers.push(customer);
+
+            try {
+                localStorage.setItem("customers", JSON.stringify(customers));
+            } catch (error) {
+                customers.pop();
+                alert("Unable to save customer");
+                return;
+            }
+
+            displayCustomers();
+
+            document.getElementById("customerId").value = "";
+            document.getElementById("customerName").value = "";
+            document.getElementById("mobile").value = "";
+            document.getElementById("city").value = "";
+            document.getElementById("purchase").value = "";
+
+            alert("Customer Added Successfully");
+        }
+
+        displayCustomers();
+    </script>
+
+</body>
+
+</html>

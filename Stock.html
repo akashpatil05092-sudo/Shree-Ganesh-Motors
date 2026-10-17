@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Showroom</h2>
+      <a class="side-link" href="index.html">Dashboard</a>
+      <a class="side-link" href="products.html">Products</a>
+      <a class="side-link" href="customers.html">Customers</a>
+      <a class="side-link" href="sales.html">Sales</a>
+      <a class="side-link active" href="stock.html">Stock</a>
+      <a class="side-link" href="billing.html">Billing</a>
+      <a class="side-link" href="report.html">Reports</a>
+    </aside>
+
+    <main class="main-content">
+      
+      <div class="showroom-board">
+        <div class="board-logo">
+          <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+        </div>
+
+        <h1 class="board-name">
+          श्री गणेश मोटर्स
+          <small>Showroom Management System</small>
+        </h1>
+
+        <div class="board-logo">
+          <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+        </div>
+      </div>
+      <h1>Showroom Management System</h1>
+      <h2>Stock Management</h2>
+
+      <form id="stockForm">
+        <label>Product</label>
+        <select id="productSelect" required>
+          <option value="">Select Product</option>
+        </select>
+
+        <label>Quantity to Add</label>
+        <input type="number" id="addQuantity" min="1" required>
+        <button type="submit">Update Stock</button>
+      </form>
+
+      <h2>Available Stock</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="stockTable"></tbody>
+      </table>
+      <p id="message"></p>
+    </main>
+  </div>
+
+  <script>
+    const getProducts = () => JSON.parse(localStorage.getItem("products") || "[]");
+    const getId = p => String(p.productId ?? p.id ?? "");
+    const getName = p => p.productName ?? p.name ?? "";
+    const getQty = p => Number(p.quantity || 0);
+
+    function displayStock() {
+      const products = getProducts();
+      const select = document.getElementById("productSelect");
+      const table = document.getElementById("stockTable");
+
+      select.innerHTML = '<option value="">Select Product</option>';
+      table.innerHTML = "";
+
+      products.forEach((p, i) => {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = getName(p);
+        select.appendChild(option);
+
+        const tr = document.createElement("tr");
+        const values = [
+          getId(p), getName(p), p.category || "",
+          "₹" + Number(p.price || 0).toFixed(2),
+          getQty(p),
+          getQty(p) <= 5 ? "Low Stock" : "Available"
+        ];
+        values.forEach(value => {
+          const td = document.createElement("td");
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+    }
+
+    document.getElementById("stockForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const index = document.getElementById("productSelect").value;
+      const amount = Number(document.getElementById("addQuantity").value);
+      const products = getProducts();
+
+      if (index === "" || amount < 1 || !Number.isInteger(amount)) {
+        document.getElementById("message").textContent = "Please enter valid details.";
+        return;
+      }
+
+      products[index].quantity = getQty(products[index]) + amount;
+      localStorage.setItem("products", JSON.stringify(products));
+      this.reset();
+      document.getElementById("message").textContent = "Stock updated successfully!";
+      displayStock();
+    });
+
+    displayStock();
+  </script>
+</body>
+
+</html>

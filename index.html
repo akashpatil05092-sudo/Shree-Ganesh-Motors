@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showroom Management</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+
+
+        const EXTENSIONS = ["jpg", "jpeg", "png", "webp", "jfif", "JPG", "JPEG", "PNG"];
+
+        function fallback(img, type) {
+
+            const next = Number(img.dataset.try || 0) + 1;
+
+            if (next < EXTENSIONS.length) {
+                img.dataset.try = next;
+                img.src = img.src.replace(/\.[^./]+$/, "." + EXTENSIONS[next]);
+                return;
+            }
+
+
+            img.onerror = null;
+            img.classList.add("fallback");
+
+            const body =
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240">' +
+                '<rect width="400" height="240" fill="#e0e7ff" />' +
+                '<path d="M40 165 L55 130 Q65 118 90 114 L140 72 Q150 64 165 64 L260 64 Q275 64 285 74 L320 114 Q345 118 355 138 L360 165 Z" fill="#2563eb" />' +
+                '<path d="M152 80 L132 112 L205 112 L205 80 Z M220 80 L220 112 L302 112 L276 80 Z" fill="#dbeafe" />' +
+                '<circle cx="105" cy="168" r="34" fill="#0f172a" /><circle cx="105" cy="168" r="14" fill="#94a3b8" />' +
+                '<circle cx="295" cy="168" r="34" fill="#0f172a" /><circle cx="295" cy="168" r="14" fill="#94a3b8" /></svg>';
+
+            img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(body);
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+            <h2 class="logo">Showroom</h2>
+            <p class="side-title">MAIN MENU</p>
+
+            <a href="index.html" class="side-link active">🏠 Dashboard</a>
+            <a href="products.html" class="side-link">📦 Products</a>
+            <a href="customers.html" class="side-link">👥 Customers</a>
+            <a href="sales.html" class="side-link">💰 Sales</a>
+            <a href="stock.html" class="side-link">📊 Stock</a>
+            <a href="billing.html" class="side-link">🧾 Billing</a>
+            <a href="reports.html" class="side-link">📈 Reports</a>
+        </aside>
+
+        <main class="main-content">
+
+
+            <div class="showroom-board">
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+
+                <h1 class="board-name">
+                    श्री गणेश मोटर्स
+                    <small>Showroom Management System</small>
+                </h1>
+
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+            </div>
+
+            Showroom Management System
+            <h2>Dashboard</h2>
+
+
+            <!-- ===== वर: Bikes ===== -->
+            <section class="gallery">
+                <h3 class="gallery-title">🏍️ Our Bikes</h3>
+                <div class="bike-gallery">
+                    <div class="bike-item">
+                        <img src="images/bike1.jpg" alt="Bike 1">
+                        <h3></h3>
+                    </div>
+
+                    <div class="bike-item">
+                        <img src="images/bike2.jpg" alt="Bike 2">
+                        <h3></h3>
+                    </div>
+
+                    <div class="bike-item">
+                        <img src="images/bike3.jpg" alt="Bike 3">
+                        <h3></h3>
+                    </div>
+                    <div class="bike-item">
+                        <img src="images/bike4.jpg" alt="Bike 4">
+                        <h3></h3>
+                    </div>
+                    <div class="bike-item">
+                        <img src="images/bike5.jpg" alt="Bike 5">
+                        <h3></h3>
+                    </div>
+                     <div class="bike-item">
+                        <img src="images/bike6.jpg" alt="Bike 6">
+                        <h3></h3>
+                    </div>
+                     <div class="bike-item">
+                        <img src="images/bike7.jpg" alt="Bike 7">
+                        <h3></h3>
+                    </div>
+                </div>
+            </section>
+
+            <div class="dashboard">
+
+                <div class="card">
+                    <h3>Products</h3>
+                    <p id="totalProducts">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Customers</h3>
+                    <p id="totalCustomers">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Total Sales</h3>
+                    <p id="totalSales">₹0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Stock</h3>
+                    <p id="totalStock">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Orders</h3>
+                    <p id="totalOrders">0</p>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function getData(key) {
+            try {
+                return JSON.parse(localStorage.getItem(key)) || [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        const products = getData("products");
+        const customers = getData("customers");
+        const sales = getData("sales");
+        const stocks = getData("stocks");
+        const bills = getData("bills");
+
+        document.getElementById("totalProducts").innerText =
+            products.length;
+
+        document.getElementById("totalCustomers").innerText =
+            customers.length;
+
+        const totalSales = bills.reduce((sum, bill) => {
+            return sum + (Number(bill.total) || 0);
+        }, 0);
+
+        document.getElementById("totalSales").innerText =
+            "₹" + totalSales.toLocaleString("en-IN");
+
+        const totalStock = stocks.length > 0
+            ? stocks.reduce((sum, stock) => {
+                return sum + (Number(stock.quantity) || 0);
+            }, 0)
+            : products.reduce((sum, product) => {
+                return sum + (Number(product.quantity) || 0);
+            }, 0);
+
+        document.getElementById("totalStock").innerText =
+            totalStock;
+
+        document.getElementById("totalOrders").innerText =
+            sales.length;
+    </script>
+
+</body>
+
+</html>

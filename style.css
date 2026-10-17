@@ -1,0 +1,551 @@
+:root {
+    --blue: #0284c7;
+    --blue-dark: #0369a1;
+    --navy: #0f2a43;
+    --bg: #eef5fa;
+    --card: #ffffff;
+    --text: #0f2a43;
+    --muted: #64748b;
+    --border: #dbe7f0;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --shadow: 0 4px 15px rgba(15, 42, 67, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 18px;
+    /* मोठा size - यावर सगळं अवलंबून आहे */
+}
+
+body {
+    margin: 0;
+    padding: 25px;
+    font-family: 'Segoe UI', 'Noto Sans Devanagari', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* ===== Layout ===== */
+.layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-height: 100vh;
+    gap: 25px;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 270px;
+    min-width: 270px;
+    min-height: calc(100vh - 50px);
+    background: var(--navy);
+    color: white;
+    padding: 28px 16px;
+    border-radius: 15px;
+    position: sticky;
+    top: 25px;
+}
+
+.sidebar h2 {
+    margin: 0 0 6px 6px;
+    font-size: 1.7rem;
+    color: #fff;
+}
+
+.sidebar p,
+.sidebar small,
+.sidebar .menu-title {
+    margin: 0 0 14px 6px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.side-link {
+    display: block;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 1.05rem;
+    padding: 14px 16px;
+    margin: 8px 0;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.side-link:hover {
+    background: rgba(2, 132, 199, 0.35);
+    color: white;
+    transform: translateX(6px);
+}
+
+.side-link.active {
+    background: var(--blue);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.45);
+}
+
+/* ===== Main content ===== */
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 5px;
+}
+
+.main-content h1 {
+    background: linear-gradient(135deg, #0f2a43, #0284c7);
+    color: white;
+    padding: 26px 28px;
+    border-radius: 14px;
+    font-size: 1.9rem;
+    margin: 0 0 28px;
+    box-shadow: var(--shadow);
+}
+
+.main-content h2 {
+    color: var(--navy);
+    font-size: 1.7rem;
+    margin: 0 0 12px;
+}
+
+.main-content h3 {
+    color: var(--navy);
+    font-size: 1.3rem;
+    margin: 30px 0 14px;
+}
+
+.main-content>p {
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+/* ===== Dashboard cards ===== */
+.dashboard,
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+    margin-top: 25px;
+}
+
+.card {
+    background: var(--card);
+    padding: 28px 24px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    border-left: 6px solid var(--blue);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(15, 42, 67, 0.14);
+}
+
+.card h3 {
+    color: var(--muted);
+    font-size: 1rem;
+    margin: 0 0 14px;
+}
+
+.card p {
+    color: var(--navy);
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* ===== Forms (Add Product, Customer, Billing ...) ===== */
+form,
+.form-box,
+.main-content div:has(> input) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: flex-end;
+    background: var(--card);
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    border-top: 5px solid var(--blue);
+}
+
+/* Billing सारखे label असलेले form: label वेगळ्या ओळीत */
+label {
+    flex: 0 0 100%;
+    margin: 6px 0 -6px;
+    font-weight: 600;
+    color: var(--navy);
+}
+
+input,
+select,
+textarea {
+    flex: 1 1 190px;
+    width: auto;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 13px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: #f8fbfd;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+}
+
+/* ===== Buttons ===== */
+button {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+    border: none;
+    padding: 13px 26px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(2, 132, 199, 0.45);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* "Back to Dashboard" सारखी बटणे form च्या बाहेर असतात */
+.main-content>button,
+.main-content>a button {
+    margin-bottom: 8px;
+}
+
+/* ===== Messages ===== */
+#message,
+.message {
+    margin: 16px 0 0;
+    font-weight: 600;
+    color: var(--success);
+    min-height: 1.5em;
+}
+
+/* ===== Tables (Product List, Customers, Sales, Stock, Reports) ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+th {
+    background: var(--navy);
+    color: white;
+    text-align: left;
+    padding: 16px 18px;
+    font-weight: 600;
+}
+
+td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+tbody tr:nth-child(even) {
+    background: #f8fbfd;
+}
+
+tbody tr:hover {
+    background: #f0f9ff;
+}
+
+/* ===== Bill (billing page) ===== */
+#billOutput {
+    margin-top: 28px;
+    max-width: 640px;
+}
+
+#billOutput:empty {
+    display: none;
+}
+
+.bill {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.bill-head {
+    background: linear-gradient(135deg, #0f2a43, #0284c7);
+    color: #fff;
+    text-align: center;
+    padding: 24px;
+}
+
+.bill-head h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.7rem;
+}
+
+.bill-head small {
+    color: #cbd5e1;
+}
+
+.bill-body {
+    padding: 24px 28px;
+}
+
+.bill-body p {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 1.05rem;
+}
+
+.bill-body p.total {
+    border: none;
+    margin-top: 10px;
+    padding: 16px 18px;
+    background: #f0f9ff;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--blue-dark);
+}
+
+.bill-foot {
+    text-align: center;
+    padding: 0 24px 24px;
+    color: var(--muted);
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 700px) {
+    body {
+        padding: 12px;
+    }
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+        position: static;
+    }
+
+    .side-link {
+        display: inline-block;
+        margin: 3px;
+        padding: 10px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* ===== Print: फक्त bill छापा ===== */
+@media print {
+
+    .sidebar,
+    form,
+    #message,
+    .main-content h1,
+    .main-content>h2,
+    button {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+        padding: 0;
+    }
+
+    .bill {
+        box-shadow: none;
+    }
+}
+
+.gallery {
+    margin: 25px 0;
+}
+
+.gallery-title {
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.photo-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.photo-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-label {
+    display: block;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* ===== Showroom Board: श्री गणेश मोटर्स (नाव मधोमध + गणेशजींचा लोगो बाजूला) ===== */
+.showroom-board {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #ffffff;
+    border: 3px solid var(--navy);
+    border-bottom: 8px solid var(--blue);
+    border-radius: 14px;
+    padding: 14px 28px;
+    margin: 0 0 24px;
+    box-shadow: var(--shadow);
+}
+
+.showroom-board .board-name {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--navy);
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    line-height: 1.2;
+}
+
+.showroom-board .board-name small {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue-dark);
+}
+
+.board-logo {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.4rem;
+    border-radius: 50%;
+    background: #f0f9ff;
+    border: 2px solid var(--blue);
+    overflow: hidden;
+}
+
+.board-logo img {
+    padding: 8px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 700px) {
+    .showroom-board {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .showroom-board .board-name {
+        font-size: 1.5rem;
+    }
+
+    .board-logo {
+        width: 52px;
+        height: 52px;
+        font-size: 2rem;
+    }
+}
+
+@media print {
+    .showroom-board {
+        border: none;
+        box-shadow: none;
+    }
+}
+
+.board-logo {
+    background-logo: \Users\HP\Showroom Management\images;
+    font-size: 2;
+}
+
+.bike-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+}
+
+.bike-item {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.bike-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.bike-item h3 {
+    margin-top: 10px;
+    color: #1e293b;
+}

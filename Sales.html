@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales - Showroom Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+            <h2 class="logo">Showroom</h2>
+            <p class="side-title">MAIN MENU</p>
+
+            <a href="index.html" class="side-link">🏠 Dashboard</a>
+            <a href="products.html" class="side-link">📦 Products</a>
+            <a href="customers.html" class="side-link">👥 Customers</a>
+            <a href="sales.html" class="side-link active">💰 Sales</a>
+            <a href="stock.html" class="side-link">📊 Stock</a>
+            <a href="billing.html" class="side-link">🧾 Billing</a>
+            <a href="reports.html" class="side-link">📈 Reports</a>
+        </aside>
+
+        <main class="main-content">
+
+            <div class="showroom-board">
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+
+                <h1 class="board-name">
+                    श्री गणेश मोटर्स
+                    <small>Showroom Management System</small>
+                </h1>
+
+                <div class="board-logo">
+                    <img src="ganesh.png" alt="श्री गणेश" onerror="this.parentNode.textContent='🕉️'">
+                </div>
+            </div>
+
+            <h1>Showroom Management System</h1>
+            <h2>Sales Management</h2>
+            <p>Manage your showroom sales records</p>
+
+            <button class="menu-btn" onclick="location.href='index.html'">
+                Back to Dashboard
+            </button>
+
+            <h3>Add Sale</h3>
+
+            <div class="card">
+                <input type="text" id="saleId" placeholder="Sale ID">
+                <input type="text" id="customerName" placeholder="Customer Name">
+                <input type="text" id="product" placeholder="Product">
+                <input type="date" id="saleDate">
+                <input type="number" id="amount" placeholder="Amount" min="0" step="0.01">
+
+                <button class="menu-btn" onclick="addSale()">
+                    Add Sale
+                </button>
+            </div>
+
+            <h3>Sales Records</h3>
+
+            <div style="overflow-x:auto;">
+                <table id="salesTable"></table>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function getSales() {
+            try {
+                const data = JSON.parse(localStorage.getItem("sales"));
+                return Array.isArray(data) ? data : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        let sales = getSales();
+
+        function displaySales() {
+            const table = document.getElementById("salesTable");
+            table.innerHTML = "";
+
+            const headers = [
+                "Sale ID",
+                "Customer Name",
+                "Product",
+                "Date",
+                "Amount"
+            ];
+
+            const headerRow = table.insertRow();
+
+            headers.forEach(function (heading) {
+                const th = document.createElement("th");
+                th.textContent = heading;
+                headerRow.appendChild(th);
+            });
+
+            sales.forEach(function (sale) {
+                const row = table.insertRow();
+
+                [
+                    sale.id,
+                    sale.customer,
+                    sale.product,
+                    sale.date,
+                    "₹" + Number(sale.amount).toLocaleString("en-IN")
+                ].forEach(function (value) {
+                    const cell = row.insertCell();
+                    cell.textContent = value ?? "";
+                });
+            });
+        }
+
+        function addSale() {
+            const id = document.getElementById("saleId").value.trim();
+            const customer = document.getElementById("customerName").value.trim();
+            const product = document.getElementById("product").value.trim();
+            const date = document.getElementById("saleDate").value;
+            const amount = document.getElementById("amount").value;
+
+            if (!id || !customer || !product || !date || amount === "") {
+                alert("Please fill all fields");
+                return;
+            }
+
+            const numericAmount = Number(amount);
+
+            if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+                alert("Please enter a valid amount greater than zero");
+                return;
+            }
+
+            const exists = sales.some(function (sale) {
+                return String(sale.id).toLowerCase() === id.toLowerCase();
+            });
+
+            if (exists) {
+                alert("Sale ID already exists");
+                return;
+            }
+
+            const sale = {
+                id: id,
+                customer: customer,
+                product: product,
+                date: date,
+                amount: numericAmount
+            };
+
+            sales.push(sale);
+
+            try {
+                localStorage.setItem("sales", JSON.stringify(sales));
+            } catch (error) {
+                sales.pop();
+                alert("Unable to save sale");
+                return;
+            }
+
+            displaySales();
+
+            document.getElementById("saleId").value = "";
+            document.getElementById("customerName").value = "";
+            document.getElementById("product").value = "";
+            document.getElementById("saleDate").value = "";
+            document.getElementById("amount").value = "";
+
+            alert("Sale Added Successfully");
+        }
+
+        displaySales();
+    </script>
+
+</body>
+
+</html>

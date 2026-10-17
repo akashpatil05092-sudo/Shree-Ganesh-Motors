@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="mr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shree Ganesh Motors - Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f4f6fa;
+        }
+
+        .login-container {
+            width: 900px;
+            min-height: 510px;
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 35px #0002;
+        }
+
+        .left-panel {
+            width: 43%;
+            background: #101b38;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 110px;
+            height: 110px;
+            border: 3px solid #a855f7;
+            border-radius: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 65px;
+            margin-bottom: 25px;
+        }
+
+        .left-panel h1 {
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+
+        .left-panel p {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 55px 45px;
+        }
+
+        .right-panel h2 {
+            color: #111827;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .welcome {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dbe1ea;
+            border-radius: 6px;
+            margin-bottom: 22px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .input-box:focus {
+            border-color: #2563eb;
+        }
+
+        .password-box {
+            display: flex;
+            border: 1px solid #dbe1ea;
+            border-radius: 6px;
+            margin-bottom: 22px;
+        }
+
+        .password-box input {
+            flex: 1;
+            min-width: 0;
+            border: none;
+            outline: none;
+            padding: 13px;
+            background: transparent;
+        }
+
+        .password-box button {
+            border: none;
+            background: white;
+            padding: 0 12px;
+            cursor: pointer;
+            color: #2563eb;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #dc2626;
+        }
+
+        footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 28px;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 15px;
+            }
+
+            .login-container {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                width: 100%;
+                padding: 25px;
+            }
+
+            .logo {
+                width: 75px;
+                height: 75px;
+                font-size: 45px;
+                margin-bottom: 15px;
+            }
+
+            .left-panel h1 {
+                font-size: 22px;
+            }
+
+            .right-panel {
+                padding: 30px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="left-panel">
+            <div class="logo">🙏</div>
+            <h1>SHREE GANESH MOTORS</h1>
+            <p>आपले स्वागत आहे<br>विश्वास • गुणवत्ता • सेवा</p>
+        </div>
+
+        <div class="right-panel">
+            <h2>स्वागत आहे!</h2>
+            <p class="welcome"></p>
+
+            <form id="loginForm">
+                <label for="username">Username</label>
+                <input class="input-box" id="username" type="text" placeholder=required>
+
+                <label for="password">Password</label>
+                <div class="password-box">
+                    <input id="password" type="password" placeholder=required>
+                    <button type="button" id="togglePassword">Show</button>
+                </div>
+
+                <button class="login-btn" type="submit">Login</button>
+                <p class="message" id="message"></p>
+            </form>
+
+            <footer>© 2026 Shree Ganesh Motors. All rights reserved.</footer>
+        </div>
+
+    </div>
+
+    <script>
+        const password = document.getElementById("password");
+        const toggle = document.getElementById("togglePassword");
+
+        toggle.addEventListener("click", function () {
+            if (password.type === "password") {
+                password.type = "text";
+                toggle.textContent = "Hide";
+            } else {
+                password.type = "password";
+                toggle.textContent = "Show";
+            }
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const userPassword = password.value;
+            const message = document.getElementById("message");
+
+            // Demo login credentials
+            if (username === "admin" && userPassword === "1234") {
+                sessionStorage.setItem("isLoggedIn", "true");
+                window.location.href = "index.html";
+            } else {
+                message.textContent = "Username&password incorrect";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
